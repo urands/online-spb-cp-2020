@@ -60,7 +60,12 @@ $(document).ready(function(){
             $('#upload-btn').empty();
             $('#upload-btn').append("100%");
             console.log(data)
-            window.location.href = data.url;
+            if (data.msg == 'done') {
+                window.location.href = data.url;
+            }else{
+                $('#upload-btn').empty();
+                $('#upload-btn').append(data.msg);
+            }
         }).fail(function (data) {
             console.log('fail');
             $('#upload-btn').empty();

@@ -7,8 +7,8 @@ async def fetch(url, body, session):
     async with session.post(url,json=body) as response:
         if response.status not in (200, 429,):
             raise ClientResponseError()
-        print(response.status)
-        print(response)
+        #print(response.status)
+        #print(response)
         return await response.json()
 
 

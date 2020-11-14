@@ -22,16 +22,24 @@
     {% for file in files %}
     <tr>
       <th scope="row">{{ loop.index0+1 }}</th>
-        <td><a href="/file/{{loop.index0+1}}">{{file}}</a> <span class="badge badge-secondary">обработка</span></td>
-      <td>14.11.2020</td>
-      <td>0
+        <td><a href="/file/{{file.id}}">{{file.name}}</a>
+                {% if file.status == 'upload' %}
+                  <span class="badge badge-info">загружен</span>
+                {% elif file.status == 'proceed' %}
+                   <span class="badge badge-secondary">обработка</span>
+                {%endif%}
+      <td>{{file.created_date}}</td>
+      <td>{{file.processed}}
       </td>
-      <td>0</td>
+      <td>{{file.failed}}</td>
        <td>
-
+           {% if file.status == 'upload' %}
+           {% elif file.status == 'proceed' %}
             <div class="spinner-border text-primary" role="status">
                 <span class="sr-only">Loading...</span>
            </div>
+           {%endif%}
+
 
         </td>
 
