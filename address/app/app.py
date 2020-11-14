@@ -88,7 +88,7 @@ async def procceed_file_1(fileid):
     start = time.time()
     failed = 0
     processed = 0
-    for df_chunk in chunk(df, 100000):
+    for df_chunk in chunk(df, 1000):
         strings = df_chunk[df_chunk.columns[0]].values
         result = await fetch_address(strings)
 
