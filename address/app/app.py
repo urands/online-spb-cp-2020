@@ -8,7 +8,7 @@ import sys
 import os
 import pandas as pd
 log = get_logger(__name__)
-dburl = 'mysql://root@localhost:3306/spb_pochta'
+dburl = os.getenv('DB_URL', 'mysql://root@localhost:3306/spb_pochta')
 
 from tortoise import Tortoise, fields, run_async
 from tortoise.models import Model
@@ -47,6 +47,9 @@ async def procceed_address(*args):
 
 @rpcg.register
 async def procceed_file(fileid):
+    return await procceed_file_1(fileid)
+
+async def procceed_file_1(fileid):
     log.info('procceed_file')
     print('Proceed file', fileid)
 
@@ -82,10 +85,10 @@ async def procceed_file(fileid):
     def chunk(seq, size):
         return (seq[pos:pos + size] for pos in range(0, len(seq), size))
     f = open(fname + '_norm.csv', 'w')
-
+    start = time.time()
     failed = 0
     processed = 0
-    for df_chunk in chunk(df, 1000):
+    for df_chunk in chunk(df, 100000):
         strings = df_chunk[df_chunk.columns[0]].values
         result = await fetch_address(strings)
 
@@ -130,7 +133,7 @@ async def procceed_file(fileid):
     file.status = 'done'
     await file.save()
 
-    print('Proceed file done')
+    print('Proceed file done:', time.time() -start )
     return { 'ok':'done'}
 
 
@@ -140,7 +143,7 @@ async def create_microservice(loop):
     while True:
 
         await Tortoise.init(db_url=dburl, modules={"models": ["app"]})
-        #await Tortoise.generate_schemas()
+        await Tortoise.generate_schemas()
 
         try:
             return await rpcg.create(
@@ -150,6 +153,28 @@ async def create_microservice(loop):
             log.warning(rmq_err)
         await asyncio.sleep(10)
 
+async def pooling_expire(server):
+    log.info('Initialize pool...')
+    await Tortoise.init(
+        db_url=dburl,
+        modules={'models': ['app','__main__']}
+    )
+    while 1:
+        try:
+            await asyncio.sleep(2)
+            #file = await Files.filter(id=int(4)).first()
+            file = await Files.filter(status='prepare').first()
+            if file is not None:
+                log.info(file)
+                file.status = 'proceed'
+                await file.save()
+                await procceed_file_1(file.id)
+        except Exception as e:
+            log.error(e)
+    log.info('Initialize pool done...')
+
+
+
 
 def main(loop):
     server = None
@@ -158,6 +183,9 @@ def main(loop):
         log.info('Initialize rabbit...')
         server = loop.run_until_complete(create_microservice(loop))
         log.info('Initialize completed!')
+        asyncio.gather(
+            pooling_expire(server),
+        )
         loop.run_until_complete(server.run())
         # loop.run_forever()
     except KeyboardInterrupt:

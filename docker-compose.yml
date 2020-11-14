@@ -1,0 +1,51 @@
+version: '3.1'
+services:
+  ### message queue bus server
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:latest
+  mysql:
+    image: mysql:5.7
+    command: --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    #volumes:
+      #- dbdata:/var/lib/mysql
+      #- ./volumes/dbdump:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_DATABASE: spb_pochta
+      MYSQL_USER: root
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    
+    ports:
+        - "3306:3306"
+
+  frontend:
+    build: ./frontend
+    image: frontend:latest
+    ports:
+      - "80:80"
+    
+    environment:
+      RMQ_URL: 'amqp://guest:guest@rabbit'
+      DB_NAME: spb_pochta
+      DB_USER: root
+      DB_HOST: mysql
+      DB_URL: "mysql://root@mysql/spb_pochta"
+    
+# RabbitMQ
+#  rabbit:
+#    hostname: rabbit
+#    image: rabbitmq:alpine
+
+  address:
+    build: ./address
+    image: address:latest
+
+    depends_on:
+      - rabbit
+      - mysql
+    environment: 
+      DB_URL: "mysql://root@mysql/spb_pochta"
+      RMQ_URL: 'amqp://guest:guest@rabbit'
+
+volumes:
+  dbdata:

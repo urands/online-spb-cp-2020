@@ -1,12 +1,16 @@
-FROM python:3.8-rc-slim as backend
+FROM python:3.7-rc-slim as frontend
 
-RUN pip install pipenv
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends gcc python-dev python3-pip && \
+  apt-get remove -y gcc python-dev && \
+  apt-get autoremove -y
+
+RUN pip3 install pipenv
 
 # install app dependencies
-COPY app/Pipfile ./app/
-COPY app/Pipfile.lock ./app/
-
-
+COPY Pipfile ./app/
+#COPY Pipfile.lock ./app/
+RUN cd app/ && pipenv install
 RUN cd app/ && pipenv lock --requirements > requirements.txt 
 RUN cd /app && pip install -r requirements.txt
 

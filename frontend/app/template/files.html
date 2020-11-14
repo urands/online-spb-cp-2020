@@ -39,6 +39,9 @@
                 <span class="sr-only">Loading...</span>
            </div>
            {%endif%}
+           {% if file.status == 'done' %}
+           <a href="/download/{{file.id}}">Скачать</a>
+           {%endif%}
 
 
         </td>

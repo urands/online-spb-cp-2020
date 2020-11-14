@@ -1,11 +1,21 @@
-from shared import app, db, client, loop
-from flask import  render_template, send_from_directory, request
+from shared import app, db, client, loop, get_client
+from flask import  render_template, send_from_directory, request, send_file
 from werkzeug.utils import secure_filename
 import os
 import models
 from datetime import datetime
 import pandas as pd
 import asyncio
+
+
+from threading import Thread
+
+def start_worker(loop):
+    asyncio.set_event_loop(loop)
+    try:
+        loop.run_forever()
+    finally:
+        loop.close()
 
 @app.route('/')
 def index():
@@ -19,18 +29,27 @@ def files():
     fl = models.Files.query.filter_by(user_id = user.id).all()
     return render_template('files.html', files = fl, user = user)
 
+@app.route('/download/<int:idx>', methods=['GET', 'POST'])
+def download(idx):
+    user = models.User.current()
+    fl = models.Files.query.get(idx)
+    fname, fext = os.path.splitext(fl.filename)
+    filename = fname + '_norm.csv'
+    return send_file(filename, as_attachment=True)
+
+
+
 @app.route('/file/<int:idx>', methods=['GET', 'POST'])
 def file(idx):
     user = models.User.current()
     fl = models.Files.query.get(idx)
-
-
     if request.method == 'POST':
         if fl.status == 'upload':
-            fl.status = 'proceed'
+            fl.status = 'prepare'
             db.session.add(fl)
             db.session.commit()
-
+            #response = client.procceed_file(fl.id)
+            #asyncio.ensure_future(response.wait(), loop=worker_loop)
     fname, fext = os.path.splitext(fl.filename)
 
     print(fext)
@@ -100,9 +119,8 @@ def upload_file():
 
 
 if __name__ == '__main__':
-    print(client)
-    response = client.procceed_file(4)
-    print(response)
-    loop.run_until_complete(response.wait())
     # Wait for results
+    worker_loop = asyncio.new_event_loop()
+    worker = Thread(target=start_worker, args=(worker_loop,))
+    client = get_client(worker_loop)
     app.run(host="0.0.0.0", port=80, debug=True)

@@ -7,8 +7,8 @@ import os
 import asyncio
 app = Flask(__name__)
 
-dburl = 'mysql+mysqldb://root@localhost:3306/spb_pochta'
-RMQ_URL = 'amqp://guest:guest@localhost'
+dburl = os.getenv('DB_URL', 'mysql+mysqldb://root@localhost:3306/spb_pochta')
+RMQ_URL = os.getenv('RMQ_URL', 'amqp://guest:guest@localhost')
 RMQ_MASTER_QUEUE = 'pochta_watcher'
 RMQ_REMOTE_QUEUE = 'pochta'
 RMQ_EVENT_QUEUE = 'pochta_events'
@@ -43,9 +43,10 @@ async def create_microservice(loop):
     return client
 
 
-def get_client():
+def get_client(loop):
     return loop.run_until_complete(create_microservice(loop))
 
-client = get_client()
+#client = get_client()
+client = None
 
 

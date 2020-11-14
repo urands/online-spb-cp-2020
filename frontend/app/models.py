@@ -19,7 +19,13 @@ class User(db.Model):
     @staticmethod
     def current():
         id =  1
-        return User.query.get(id)
+        user = User.query.get(id)
+        if user is None:
+            user = User(id=1, fio='ООО "Интернет магазин"', username = 'user')
+            db.session.add(user)
+            db.session.commit()
+
+        return User.query.get(user)
 
 
     def verify_password(self, password):
