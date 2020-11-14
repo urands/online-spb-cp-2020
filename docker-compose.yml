@@ -30,6 +30,9 @@ services:
       DB_USER: root
       DB_HOST: mysql
       DB_URL: "mysql://root@mysql/spb_pochta"
+    volumes:
+       - app-volume:/app/upload
+
     
 # RabbitMQ
 #  rabbit:
@@ -46,6 +49,8 @@ services:
     environment: 
       DB_URL: "mysql://root@mysql/spb_pochta"
       RMQ_URL: 'amqp://guest:guest@rabbit'
+    volumes:
+       - app-volume:/app/upload
 
 volumes:
-  dbdata:
+     app-volume: 
