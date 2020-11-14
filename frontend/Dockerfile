@@ -1,8 +1,7 @@
 FROM python:3.7-rc-slim as frontend
 
 RUN apt-get update && \
-  apt-get install -y --no-install-recommends gcc python-dev python-mysqldb python3-pip && \
-  apt-get remove -y gcc python-dev && \
+  apt-get install -y --no-install-recommends gcc python3-dev python3-mysqldb python3-pip default-libmysqlclient-dev && \
   apt-get autoremove -y
 
 RUN pip3 install pipenv

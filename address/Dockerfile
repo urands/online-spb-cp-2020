@@ -9,6 +9,7 @@ COPY Pipfile ./app/
 RUN cd app/ && pipenv install
 RUN cd app/ && pipenv lock --requirements > requirements.txt 
 RUN cd /app && pip install -r requirements.txt
+RUN cd /app && pip install xlrd
 
 # add app
 COPY . ./

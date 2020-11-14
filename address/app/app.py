@@ -155,6 +155,7 @@ async def create_microservice(loop):
 
 async def pooling_expire(server):
     log.info('Initialize pool...')
+    await asyncio.sleep(15)
     await Tortoise.init(
         db_url=dburl,
         modules={'models': ['app','__main__']}

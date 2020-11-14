@@ -18,14 +18,14 @@ class User(db.Model):
 
     @staticmethod
     def current():
-        id =  1
-        user = User.query.get(id)
+        idx =  1
+        user = User.query.get(idx)
         if user is None:
-            user = User(id=1, fio='ООО "Интернет магазин"', username = 'user')
+            user = User( fio='ООО "Интернет магазин"', username = 'user')
             db.session.add(user)
             db.session.commit()
 
-        return User.query.get(user)
+        return user
 
 
     def verify_password(self, password):

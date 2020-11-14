@@ -1,11 +1,14 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import logging
+import time
 import rpcgrid.aio as rpcg
 from rpcgrid.aio.providers.rabbit import RabbitProvider
 import os
 import asyncio
 app = Flask(__name__)
+
+time.sleep(12)
 
 dburl = os.getenv('DB_URL', 'mysql+mysqldb://root@localhost:3306/spb_pochta')
 RMQ_URL = os.getenv('RMQ_URL', 'amqp://guest:guest@localhost')
