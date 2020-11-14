@@ -9,10 +9,9 @@ verify_ssl = true
 flask = "*"
 flask-sqlalchemy = "*"
 rpcgrid = "*"
-mysql-connector = "*"
 pandas = "*"
 xlrd = "*"
-mysql-python = "*"
+
 
 
 [requires]

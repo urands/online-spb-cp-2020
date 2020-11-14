@@ -5,7 +5,7 @@
 ## Требования
 
 - Установить [Docker](https://www.docker.com/products/docker-desktop)
-- `git clone https://gitlab.com/urands/online-hack-rif-2020.git`
+- `git clone https://github.com/urands/online-spb-cp-2020`
 
 ## Запуск сервера
 
