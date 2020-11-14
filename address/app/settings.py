@@ -1,3 +1,4 @@
+import os
 ADDRESS_VERSION = '0.0.1'
 
 # DB_URL = 'mysql://root:1@localhost:3306/eth_watcher?charset=utf8'
