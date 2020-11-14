@@ -1,0 +1,77 @@
+body{
+    font-family: Roboto, Arial, sans-serif;
+}
+
+
+a:hover, a:visited, a:link, a:active{
+    color: #0055a6;
+    text-decoration: none;
+}
+
+
+.head{
+    border-bottom: 2px solid #f7f7f7;
+    height: 96px;
+    align-items: center;
+    -moz-box-align: center;
+    font-size: 18px;
+
+}
+
+.pre-text{
+    text-align: center;
+    align-items: center;
+    -moz-box-align: center;
+    font-size: 22pt;
+    height: 96px;
+    padding-top: 40px;
+    color: #ACACAC;
+}
+
+.center-text{
+    text-align: center;
+    align-items: center;
+    padding: 30px 0px;
+}
+
+.bottom-text{
+    text-align: center;
+    align-items: center;
+    padding: 30px 0px;
+    font-size: 12px;
+    color: #ACACAC;
+}
+
+.ellipse {
+    background: #FFFFFF;
+    border: 1px solid #F7F7F7;
+    box-sizing: border-box;
+    box-shadow: 0px 9px 15px #E5E5E5;
+    border-radius: 50%;
+    height: 240px;
+    width: 240px;
+    background-image: url('btn.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    color: #0055a6;
+    font-size: 40px;
+}
+
+.ellipse:hover{
+    animation-name: rotation;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+
+}
+
+@keyframes rotation {
+    0% {
+        transform:rotate(0deg);
+    }
+    100% {
+        transform:rotate(360deg);
+    }
+}
+
+

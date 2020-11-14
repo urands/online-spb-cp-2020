@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{{ super() }}
+<div class="col-md-12 pre-text">
+Файл !file_name! {{idx}} <span class="badge badge-secondary">обработка</span></td>
+</div>
+<div class="col-md-6 center-text">
+  <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Col 1</th>
+      <th scope="col">Col 2</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+  </table>
+</div>
+<div class="offset-md-1 col-md-5" style="padding: 30px 0px;">
+    <form>
+        <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <label class="input-group-text" for="inputGroupSelect01">Колонка с адресом</label>
+              </div>
+              <select class="custom-select" id="inputGroupSelect01">
+                <option selected>Выберите...</option>
+                <option value="1" selected>Col 1</option>
+                <option value="2">Col 2</option>
+                <option value="3">Col 3</option>
+              </select>
+            </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="exampleCheck1">
+            <label class="form-check-label" for="exampleCheck1">Имена колонок в первой строке</label>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-secondary disabled">Обработка...</button>
+        </div>
+
+
+
+
+    </form>
+</div>
+{% endblock %}

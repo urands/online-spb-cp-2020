@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+{{ super() }}
+<div class="col-md-12 pre-text">
+Ваши загруженные файлы
+</div>
+<div class="col-md-12 center-text">
+
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Имя файла</th>
+      <th scope="col">Дата</th>
+      <th scope="col">Нормированно адресов</th>
+      <th scope="col">Нераспознано</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for file in files %}
+    <tr>
+      <th scope="row">{{ loop.index0+1 }}</th>
+        <td><a href="/file/{{loop.index0+1}}">{{file}}</a> <span class="badge badge-secondary">обработка</span></td>
+      <td>14.11.2020</td>
+      <td>0
+      </td>
+      <td>0</td>
+       <td>
+
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+           </div>
+
+        </td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+</div>
+{% endblock %}
